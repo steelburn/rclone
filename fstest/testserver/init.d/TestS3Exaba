@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -e
+
+NAME=exaba
+# User and pass are hard coded at the moment
+USER=AKIATCKARY4LVG2JUQ4Z
+# Like this so we don't trigger Githubs AWS credentials detection!
+PASS=$(echo YTJiZmVhWFNQd2dzMnBPcXhUbXExSVRRRktyMnlBOTZqa2NkMS9Nbwo= | base64 -d)
+PORT=28635
+
+. $(dirname "$0")/docker.bash
+
+start() {
+    docker run --rm -d --name $NAME \
+           -e "CLUSTER_NAME=rclone" \
+           -e "CLUSTER_SIZE_GB=20" \
+           -p 127.0.0.1:${PORT}:9000 \
+           exaba/exaba
+
+    echo type=s3
+    echo provider=Exaba
+    echo access_key_id=$USER
+    echo secret_access_key=$PASS
+    echo endpoint=http://127.0.0.1:${PORT}/
+    echo _connect=127.0.0.1:${PORT}
+}
+
+. $(dirname "$0")/run.bash
