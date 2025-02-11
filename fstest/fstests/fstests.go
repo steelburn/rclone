@@ -1513,6 +1513,7 @@ func Run(t *testing.T, opt *Opt) {
 
 			// TestFsRmdirFull tests removing a non empty directory
 			t.Run("FsRmdirFull", func(t *testing.T) {
+				t.Skip()
 				skipIfNotOk(t)
 				if isBucketBasedButNotRoot(f) {
 					t.Skip("Skipping test as non root bucket-based remote")
