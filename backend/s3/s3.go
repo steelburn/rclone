@@ -101,6 +101,9 @@ var providerOption = fs.Option{
 		Value: "Dreamhost",
 		Help:  "Dreamhost DreamObjects",
 	}, {
+		Value: "Exaba",
+		Help:  "Exaba Object Storage",
+	}, {
 		Value: "GCS",
 		Help:  "Google Cloud Storage",
 	}, {
@@ -3524,6 +3527,12 @@ func setQuirks(opt *Options) {
 		urlEncodeListings = false
 		virtualHostStyle = false
 		useAlreadyExists = false // untested
+	case "Exaba":
+		listObjectsV2 = false
+		virtualHostStyle = false
+		urlEncodeListings = false
+		//useMultipartEtag = false
+		useAlreadyExists = false
 	case "GCS":
 		// Google break request Signature by mutating accept-encoding HTTP header
 		// https://github.com/rclone/rclone/issues/6670
