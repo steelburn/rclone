@@ -4662,7 +4662,7 @@ func (f *Fs) makeBucket(ctx context.Context, bucket string) error {
 		var awsErr smithy.APIError
 		if errors.As(err, &awsErr) {
 			switch awsErr.ErrorCode() {
-			case "BucketAlreadyOwnedByYou":
+			case "BucketAlreadyOwnedByYou", "Conflict": // FIXME Exaba workaround
 				err = nil
 			case "BucketAlreadyExists", "BucketNameUnavailable":
 				if f.opt.UseAlreadyExists.Value {
