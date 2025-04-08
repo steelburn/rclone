@@ -397,6 +397,15 @@ func (m *Metadata) WritePermissions(ctx context.Context) (err error) {
 	return nil
 }
 
+// pprint takes an interface and logs it as human-readable JSON.
+func pprint(what string, data interface{}) {
+	jsonData, err := json.MarshalIndent(data, "", "    ") // Use 4 spaces for indentation.
+	if err != nil {
+		fs.Errorf(nil, "%s: Error marshaling JSON: %v", what, err)
+	}
+	fs.Errorf(nil, "%s:\n%s", what, string(jsonData))
+}
+
 // Order the permissions so that any with users come first.
 //
 // This is to work around a quirk with Graph:
@@ -411,6 +420,7 @@ func (m *Metadata) WritePermissions(ctx context.Context) (err error) {
 //
 // See: https://github.com/rclone/rclone/issues/8465
 func (m *Metadata) orderPermissions(xs []*api.PermissionsType) {
+	pprint("perms before sort", xs)
 	// Return true if identity has any user permissions
 	hasUserIdentity := func(identity *api.IdentitySet) bool {
 		if identity == nil {
@@ -441,6 +451,7 @@ func (m *Metadata) orderPermissions(xs []*api.PermissionsType) {
 		}
 		return cmp.Compare(a.ID, b.ID)
 	})
+	pprint("perms after sort", xs)
 }
 
 // sortPermissions sorts the permissions (to be written) into add, update, and remove queues
